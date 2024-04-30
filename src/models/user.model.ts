@@ -43,6 +43,9 @@ class User extends Base {
 	})
 	password: string;
 
+	@Column({ nullable: true, default: null })
+	otp: number;
+
 	@Column('varchar', {
 		nullable: true,
 		default: null,

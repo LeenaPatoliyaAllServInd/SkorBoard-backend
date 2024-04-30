@@ -131,6 +131,30 @@ const retriveProfileById = async (
 	}
 };
 
+const verifyOTP = async (
+	request: Request,
+	response: Response,
+): Promise<Response> => {
+	try {
+		const { email, otp } = request.body;
+		if (!otp) {
+			throw new CustomError(`Please enter OTP from email`, 400);
+		}
+		const constraint = await userService.verifyOTP(request.body);
+		if (constraint) {
+			return response.json(
+				successResponse('OTP verify successfully', constraint),
+			);
+		} else {
+			return response.json(
+				successResponse('OTP not verified', constraint),
+			);
+		}
+	} catch (error) {
+		return handleErrorResponse(response, error);
+	}
+};
+
 export = {
 	googleAuth,
 	googleAuthCallback,
@@ -139,4 +163,5 @@ export = {
 	changePassword,
 	updateProfile,
 	retriveProfileById,
+	verifyOTP,
 };

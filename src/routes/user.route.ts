@@ -55,9 +55,14 @@ router.get(
 	userController.retriveProfileById,
 );
 
+router.post('/refresh/token', (req, res, next) => {
+	validateRefreshToken(req, res, next);
+});
+
 router.post(
-	'/refresh/token',
+	'/verify/otp',
 	(req, res, next) => {
-		validateRefreshToken(req, res, next);
-	}
+		validateToken(req, res, next);
+	},
+	userController.verifyOTP,
 );

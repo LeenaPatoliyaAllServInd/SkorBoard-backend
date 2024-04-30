@@ -58,6 +58,16 @@ const loginUser = async (data: any): Promise<any> => {
 		},
 	}).then(async (result: any) => {
 		if (result) {
+			if (result.is_password_changed) {
+				result.otp = generateOTP();
+				const mailOptions = {
+					from: process.env.EMAIL_USER,
+					to: data.email,
+					subject: 'Login OTP',
+					text: `Your OTP for login is: ${result.otp}`,
+				};
+				await MailService.sendMail(mailOptions);
+			}
 			result.token = token;
 			result.refresh_token = refreshToken;
 			await result.save();
@@ -131,6 +141,24 @@ const retriveProfileById = async (data: any): Promise<any> => {
 	}
 };
 
+const verifyOTP = async (data: any): Promise<any> => {
+	try {
+		const profileData = await User.findOne({ where: data }).then(
+			(result) => {
+				return result;
+			},
+		);
+		return profileData;
+	} catch (error) {
+		console.error('Error while updating user:', error);
+		throw error;
+	}
+};
+
+const generateOTP = (): string => {
+	return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
 export = {
 	authenticateWithGoogle,
 	authenticateWithGoogleCallback,
@@ -139,4 +167,5 @@ export = {
 	changePassword,
 	updateProfile,
 	retriveProfileById,
+	verifyOTP,
 };
