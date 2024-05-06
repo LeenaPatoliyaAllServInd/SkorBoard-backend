@@ -30,10 +30,10 @@ const validateToken = (req: any, res: any, next: any) => {
 		const jwtSecretKey: any = process.env.ACCESS_TOKEN_JWT_SECRET_KEY;
 		const token = req.header('token');
 		if (token) {
-			const verified = jwt.verify(token, jwtSecretKey);
+			const verified: any = jwt.verify(token, jwtSecretKey);
 			console.log('verifiedverifiedverified', verified);
 			if (verified) {
-				// req.userId = verified.id ?? verified.userId;
+				req.userId = verified.id ?? verified.userId;
 				console.log('Token verify successfully');
 				next();
 			} else {
