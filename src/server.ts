@@ -12,6 +12,8 @@ import crypto from 'crypto';
 import session from 'express-session';
 import passport from 'passport';
 import passportConfig from './config/passport';
+import cors from 'cors'
+
 passportConfig(passport);
 
 const PORT = process.env.PORT || 3001;
@@ -27,7 +29,7 @@ app.set('views', path.join(__dirname, 'views'));
 const secretKey = crypto.randomBytes(32).toString('hex');
 app.use(
 	session({
-		secret: secretKey, 
+		secret: secretKey,
 		resave: false,
 		saveUninitialized: false,
 	}),
@@ -36,6 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 winston.add(new winston.transports.Console());
 app.use(express.json());
+app.use(cors())
 app.use('/v1', Router);
 
 const establishDatabaseConnection = async (): Promise<void> => {

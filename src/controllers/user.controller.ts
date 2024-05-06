@@ -9,6 +9,31 @@ import userService from '@services/user.service';
 const googleAuth = authService.authenticateWithGoogle;
 const googleAuthCallback = authService.authenticateWithGoogleCallback;
 
+const signinWithGoogle = async (
+	request: Request,
+	response: Response
+): Promise<Response> => {
+	try {
+		const requestBody = request.body;
+		if (!requestBody.email) {
+			throw new CustomError(`Please provide email address`, 400);
+		}
+		const constraint = await userService.signinWithGoogle(requestBody);
+
+		if (constraint) {
+			return response.json(
+				successResponse('User created successfully', constraint),
+			);
+		} else {
+			return response.json(
+				successResponse('User not created', constraint),
+			);
+		}
+	} catch (error) {
+		return handleErrorResponse(response, error);
+	}
+}
+
 const registerUser = async (
 	request: Request,
 	response: Response,
@@ -18,7 +43,6 @@ const registerUser = async (
 		if (!requestBody.email) {
 			throw new CustomError(`Please provide email address`, 400);
 		}
-
 		const constraint = await userService.createUser(requestBody);
 
 		if (constraint) {
@@ -164,4 +188,5 @@ export = {
 	updateProfile,
 	retriveProfileById,
 	verifyOTP,
+	signinWithGoogle
 };

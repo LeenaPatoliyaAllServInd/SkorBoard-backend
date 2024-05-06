@@ -66,3 +66,5 @@ router.post(
 	},
 	userController.verifyOTP,
 );
+
+router.post('/google-signin', userController.signinWithGoogle)

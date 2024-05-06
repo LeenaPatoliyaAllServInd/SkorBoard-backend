@@ -11,14 +11,28 @@ import {
 	encryptData,
 	decryptData,
 } from '../middleware/cryptography/encryption_decryption';
+
 const authenticateWithGoogle = passport.authenticate('google', {
 	scope: ['profile', 'email'],
 });
-
 const authenticateWithGoogleCallback = passport.authenticate('google', {
 	successRedirect: 'success',
 	failureRedirect: 'www.gmail.com',
 });
+
+const signinWithGoogle = async (data: any): Promise<any> => {
+
+	const constraint = new User();
+	constraint.email = data.email;
+	constraint.first_name = data.first_name
+	constraint.last_name = data.last_name
+	constraint.logged_in_with = LOGIN_WITH.OTHER;
+	const { token, refreshToken } = await generateToken(constraint, false);
+	constraint.token = token;
+	constraint.refresh_token = refreshToken;
+	await constraint.save();
+	return constraint;
+}
 
 const createUser = async (data: any): Promise<any> => {
 	return await createConstraint(data);
@@ -74,7 +88,6 @@ const loginUser = async (data: any): Promise<any> => {
 		}
 		return result;
 	});
-
 	return loggedinUser;
 };
 
@@ -168,4 +181,5 @@ export = {
 	updateProfile,
 	retriveProfileById,
 	verifyOTP,
+	signinWithGoogle
 };
