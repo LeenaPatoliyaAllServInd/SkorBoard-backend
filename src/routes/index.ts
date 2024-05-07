@@ -1,7 +1,7 @@
 import { router as userRouter } from "@routes/user.route";
-import { router as reportRouter } from "@routes/report.route";
+import { router as dataStoreRouter } from "@routes/datastore.route";
 import { Router } from "express";
 export const router = Router();
 
 router.use("/auth", userRouter);
-router.use("/report", reportRouter);
+router.use("/datastore", dataStoreRouter);

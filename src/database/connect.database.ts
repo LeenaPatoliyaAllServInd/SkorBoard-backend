@@ -1,7 +1,7 @@
 import { DataSource, Entity } from 'typeorm';
 
 import User from "@models/user.model"
-import Report from '@models/report.model';
+import DataStore from '@models/datastore.model';
 
 let cachedDataSource: DataSource | null = null;
 
@@ -16,7 +16,7 @@ const createDatabaseConnection = async (): Promise<DataSource> =>{
         synchronize: true,
         ssl: false,
         entities: {
-            User, Report
+            User, DataStore
         }
     }
     const AppDataSource = new DataSource(databaseConfig);

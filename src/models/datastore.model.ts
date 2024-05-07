@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import Base from './utils/Generic.model';
 
 @Entity()
-class Report extends Base {
+class DataStore extends Base {
 	@PrimaryGeneratedColumn()
 	id: number;
 
@@ -22,4 +22,4 @@ class Report extends Base {
 	userId: number;
 }
 
-export default Report;
+export default DataStore;
